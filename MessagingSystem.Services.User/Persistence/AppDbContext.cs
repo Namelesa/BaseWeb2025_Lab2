@@ -30,6 +30,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             builder.Property(u => u.HashNickName)
                 .HasMaxLength(120)
                 .IsRequired();
+
+            builder.Property(u => u.Role)
+                .IsRequired()
+                .HasMaxLength(10);
         });
         modelBuilder.Entity<Core.User.User>()
             .HasIndex(u => u.HashLogin)

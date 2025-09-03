@@ -1,14 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
-using MessagingSystem.Services.User.Application.Auth.Login;
-using MessagingSystem.Services.User.Application.Auth.Login.Dto;
+using MessagingSystem.Services.User.Application.Login;
+using MessagingSystem.Services.User.Application.Login.Dto;
 using MessagingSystem.Services.User.WebApi.Login.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MessagingSystem.Services.User.WebApi.Login;
 
 [ApiController]
-[Route("api/auth")]
+[Route("users")]
 public class LoginController(IMapper mapper, ILoginOrchestrator loginOrchestrator) : ControllerBase
 {
     [HttpPost("login")]

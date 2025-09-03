@@ -1,9 +1,7 @@
 using MessagingSystem.Services.User.Application;
 using MessagingSystem.Services.User.Infrastructure;
-using MessagingSystem.Services.User.Infrastructure.Keys;
 using MessagingSystem.Services.User.Persistence;
 using MessagingSystem.Services.User.Persistence.DbInitializer;
-using Microsoft.AspNetCore.Authorization;
 
 namespace MessagingSystem.Services.User.WebApi;
 
@@ -36,8 +34,6 @@ public class Program
         using (var scope = app.Services.CreateScope())
         {
             var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
-            var publisher = scope.ServiceProvider.GetRequiredService<KeyPublisher>();
-            await publisher.PublishAsync();
             await dbInitializer.Initialize();
         }
 

@@ -1,13 +1,8 @@
 using System.Text;
-using Encryptor.Decryption;
-using Encryptor.Encryption;
 using MessagingSystem.Services.User.Infrastructure.HasherInfo;
 using MessagingSystem.Services.User.Infrastructure.Jwt;
-using MessagingSystem.Services.User.Infrastructure.Keys;
-using MessagingSystem.Services.User.Infrastructure.MessageBroker;
 using MessagingSystem.Services.User.Infrastructure.PasswordHasher;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -20,15 +15,6 @@ public static class AddInfrastructure
     {
         services.AddScoped<IHasher, Hasher>();
         services.AddScoped<IHasherPassword, HasherPassword>();
-        services.AddSingleton<IEncryptionInfo, EncryptionInfo>();
-        services.AddSingleton<IDecryptionInfo, DecryptionInfo>();
-        services.AddSingleton<IPublicKeyStorage, PublicKeyStorage>();
-        services.AddScoped<KeyPublisher>();
-        services.Configure<MessageBrokerSettings>(
-            configuration.GetSection("MessageBroker"));
-
-        services.AddSingleton(sp =>
-            sp.GetRequiredService<IOptions<MessageBrokerSettings>>().Value);
         
         services.AddScoped<IJwtService, JwtService>();
         
@@ -59,11 +45,9 @@ public static class AddInfrastructure
                     if (!context.Request.Cookies.ContainsKey("access_token")) 
                         return Task.CompletedTask;
                     var encryptedToken = context.Request.Cookies["access_token"];
-                    var decryptService = context.HttpContext.RequestServices.GetRequiredService<IDecryptionInfo>();
                     if (encryptedToken == null) 
                         return Task.CompletedTask;
-                    var decryptedToken = decryptService.Decrypt(encryptedToken);
-                    context.Token = decryptedToken;
+                    context.Token = encryptedToken;
                     
                     Console.WriteLine("OnMessageReceived triggered, token set.");
                     

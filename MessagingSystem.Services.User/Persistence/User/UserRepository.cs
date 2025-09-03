@@ -13,6 +13,9 @@ public class UserRepository(AppDbContext db) : IUserRepository
     
     public async Task<Core.User.User?> FindUserByIdAsync(string id) => 
         await db.Users.FirstOrDefaultAsync(u => u.Id == id);
+    
+    public async Task<Core.User.User?> FindByRefreshTokenAsync(string token) => 
+        await db.Users.FirstOrDefaultAsync(u => u.RefreshToken == token);
 
     public async Task AddUserAsync(Core.User.User user)
     {
